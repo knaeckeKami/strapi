@@ -4,6 +4,7 @@ import {
   Page,
   useAPIErrorHandler,
   isFetchError,
+  GradientBadge,
   useNotification,
   useField,
   useRBAC,
@@ -124,6 +125,7 @@ const ReleasesSettingsPage = () => {
                     id: 'content-releases.pages.Settings.releases.title',
                     defaultMessage: 'Releases',
                   })}
+                  secondaryAction={<GradientBadge />}
                   subtitle={formatMessage({
                     id: 'content-releases.pages.Settings.releases.description',
                     defaultMessage: 'Create and manage content updates',

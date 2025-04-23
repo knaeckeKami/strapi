@@ -26,7 +26,7 @@ import {
   Typography,
   Link,
 } from '@strapi/design-system';
-import { Plus } from '@strapi/icons';
+import { Lightning, Plus } from '@strapi/icons';
 import { EmptyDocuments } from '@strapi/icons/symbols';
 import { format } from 'date-fns';
 import { useIntl } from 'react-intl';
@@ -43,6 +43,12 @@ import {
   GetReleasesQueryParams,
   useCreateReleaseMutation,
 } from '../services/release';
+
+const GradientBadge = styled(Badge)`
+  background: linear-gradient(45deg, #4945ff, #9736e8);
+  color: #ffffff !important;
+  padding: 4px 10px;
+`;
 
 /* -------------------------------------------------------------------------------------------------
  * ReleasesGrid
@@ -179,6 +185,8 @@ const INITIAL_FORM_VALUES = {
 } satisfies FormValues;
 
 const ReleasesPage = () => {
+  const { license } = useLicenseLimits();
+  console.log('license', license);
   const location = useLocation();
   const [releaseModalShown, setReleaseModalShown] = React.useState(false);
   const { toggleNotification } = useNotification();
@@ -283,6 +291,19 @@ const ReleasesPage = () => {
           id: 'content-releases.pages.Releases.title',
           defaultMessage: 'Releases',
         })}
+        secondaryAction={
+          <GradientBadge>
+            <Flex gap={1} alignItems="center">
+              <Lightning width={16} height={16} fill="neutral1000" />
+              <Typography textColor="#ffffff">
+                {formatMessage({
+                  id: 'components.premiumFeature.title',
+                  defaultMessage: 'Premium feature',
+                })}
+              </Typography>
+            </Flex>
+          </GradientBadge>
+        }
         subtitle={formatMessage({
           id: 'content-releases.pages.Releases.header-subtitle',
           defaultMessage: 'Create and manage content updates',

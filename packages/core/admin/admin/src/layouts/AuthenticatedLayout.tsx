@@ -16,6 +16,7 @@ import { NpsSurvey } from '../components/NpsSurvey';
 import { Page } from '../components/PageHelpers';
 import { PluginsInitializer } from '../components/PluginsInitializer';
 import { PrivateRoute } from '../components/PrivateRoute';
+import { UpsellBanner } from '../components/UpsellBanner';
 import { AppInfoProvider } from '../features/AppInfo';
 import { useAuth } from '../features/Auth';
 import { useConfiguration } from '../features/Configuration';
@@ -122,6 +123,7 @@ const AdminLayout = () => {
             <SkipToContent>
               {formatMessage({ id: 'skipToContent', defaultMessage: 'Skip to content' })}
             </SkipToContent>
+            <UpsellBanner />
             <Flex alignItems="flex-start">
               <LeftMenu
                 generalSectionLinks={generalSectionLinks}

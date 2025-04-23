@@ -1,4 +1,5 @@
 import {
+  Badge,
   Button,
   Flex,
   Grid,
@@ -10,6 +11,7 @@ import {
 import { Check } from '@strapi/icons';
 import { useIntl } from 'react-intl';
 import * as yup from 'yup';
+import { GradientBadge } from '../../../../../../admin/src/components/GradientBadge';
 
 import {
   Form,
@@ -159,6 +161,7 @@ export const SingleSignOnPage = () => {
                   id: 'Settings.sso.description',
                   defaultMessage: 'Configure the settings for the Single Sign-On feature.',
                 })}
+                secondaryAction={<GradientBadge />}
               />
               <Layouts.Content>
                 {isSubmitting || isLoadingData ? (
