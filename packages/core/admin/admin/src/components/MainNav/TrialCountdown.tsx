@@ -1,7 +1,85 @@
-import { Flex, Menu, Tooltip } from '@strapi/design-system';
+import { Flex, Menu, Tooltip, StrapiTheme } from '@strapi/design-system';
 import { Lightning } from '@strapi/icons';
 import { useIntl } from 'react-intl';
 import { styled } from 'styled-components';
+import React, { ReactNode } from 'react';
+
+const LightningComponent = styled(Lightning)`
+  fill: linear-gradient(
+    90deg,
+    ${({ theme }) => theme.colors.primary600} 0%,
+    ${({ theme }) => theme.colors.alternative600} 121.48%
+  );
+`;
+
+// CircleProgressBar component
+const CircleBackground = styled.circle`
+  fill: none;
+  stroke: ${({ theme }) => theme.colors.neutral150};
+`;
+
+const CircleProgress = styled.circle<{
+  $dashArray: number;
+  $dashOffset: number;
+  $strokeColor?: keyof StrapiTheme['colors'];
+}>`
+  fill: none;
+  stroke: ${({ theme, $strokeColor }) => theme.colors[$strokeColor || 'neutral800']};
+  stroke-dasharray: ${({ $dashArray }) => $dashArray};
+  stroke-dashoffset: ${({ $dashOffset }) => $dashOffset};
+  stroke-linecap: round;
+  stroke-linejoin: round;
+`;
+
+type CircleProgressBarProps = {
+  percentage: number;
+  circleWidth: number;
+  children?: ReactNode;
+  strokeWidth?: number;
+  strokeColor?: keyof StrapiTheme['colors'];
+};
+
+const CircleProgressBar: React.FC<CircleProgressBarProps> = ({
+  percentage,
+  circleWidth,
+  children,
+  strokeWidth = 2,
+  strokeColor = 'primary600',
+}) => {
+  const realPercentage = percentage > 100 ? 100 : percentage;
+  const radius = circleWidth / 2 - strokeWidth;
+  const dashArray = radius * Math.PI * 2;
+  const dashOffset = dashArray - (dashArray * realPercentage) / 100;
+
+  return (
+    <div>
+      <svg width={circleWidth} height={circleWidth} viewBox={`0 0 ${circleWidth} ${circleWidth}`}>
+        <CircleBackground
+          cx={circleWidth / 2}
+          cy={circleWidth / 2}
+          strokeWidth={`${strokeWidth}px`}
+          r={radius}
+        />
+        <CircleProgress
+          cx={circleWidth / 2}
+          cy={circleWidth / 2}
+          strokeWidth={`${strokeWidth}px`}
+          $strokeColor={strokeColor}
+          r={radius}
+          $dashArray={dashArray}
+          $dashOffset={dashOffset}
+          transform={`rotate(-90, ${circleWidth / 2}, ${circleWidth / 2})`}
+        />
+        <LightningComponent x="10" y="10" />
+      </svg>
+    </div>
+  );
+};
+
+// TrialCountdown component
+type TrialCountdownProps = {
+  daysLeftInTrial: number;
+};
 
 const MenuTrigger = styled(Menu.Trigger)`
   height: ${({ theme }) => theme.spaces[7]};
@@ -11,33 +89,29 @@ const MenuTrigger = styled(Menu.Trigger)`
   padding: 0;
   overflow: hidden;
 `;
-const LightningComponent = styled(Lightning)`
-  fill: linear-gradient(90deg, #4945ff 0%, #9736e8 121.48%);
-  margin: 1px 0 0 4px;
-`;
 
-const TrialCountdown = () => {
+const TrialCountdown = ({ daysLeftInTrial }: TrialCountdownProps) => {
   const { formatMessage } = useIntl();
 
   return (
     <Flex justifyContent="center" padding={3}>
       <Menu.Root>
-        <MenuTrigger endIcon={null} fullWidth justifyContent="center">
-          <Tooltip
-            label={formatMessage(
-              {
-                id: 'app.components.LeftMenu.trialCountdown',
-                defaultMessage: 'Your trial ends on ',
-              },
-              {
-                date: 'April 1, 2025',
-              }
-            )}
-            side="right"
-          >
-            <LightningComponent />
-          </Tooltip>
-        </MenuTrigger>
+        <Tooltip
+          label={formatMessage(
+            {
+              id: 'app.components.LeftMenu.trialCountdown',
+              defaultMessage: 'Your trial ends on ',
+            },
+            {
+              date: 'April 1, 2025',
+            }
+          )}
+          side="right"
+        >
+          <MenuTrigger endIcon={null} fullWidth justifyContent="center">
+            <CircleProgressBar percentage={((30 - 1) * 100) / 30} circleWidth={32} />
+          </MenuTrigger>
+        </Tooltip>
       </Menu.Root>
     </Flex>
   );
