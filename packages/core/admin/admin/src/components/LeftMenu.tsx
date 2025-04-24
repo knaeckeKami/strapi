@@ -14,8 +14,8 @@ import { getDisplayName } from '../utils/users';
 import { MainNav } from './MainNav/MainNav';
 import { NavBrand } from './MainNav/NavBrand';
 import { NavLink } from './MainNav/NavLink';
-import { TrialCountdown } from './MainNav/TrialCountdown';
 import { NavUser } from './MainNav/NavUser';
+import { TrialCountdown } from './MainNav/TrialCountdown';
 
 const sortLinks = (links: MenuItem[]) => {
   return links.sort((a, b) => {
@@ -129,7 +129,7 @@ const LeftMenu = ({ generalSectionLinks, pluginsSectionLinks }: LeftMenuProps) =
             })
           : null}
       </NavListWrapper>
-      <TrialCountdown></TrialCountdown>
+      <TrialCountdown />
       <NavUser initials={initials}>{userDisplayName}</NavUser>
     </MainNav>
   );

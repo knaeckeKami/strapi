@@ -1,7 +1,7 @@
 import { Flex, Menu, Tooltip } from '@strapi/design-system';
-import { styled } from 'styled-components';
 import { Lightning } from '@strapi/icons';
 import { useIntl } from 'react-intl';
+import { styled } from 'styled-components';
 
 const MenuTrigger = styled(Menu.Trigger)`
   height: ${({ theme }) => theme.spaces[7]};
@@ -24,12 +24,15 @@ const TrialCountdown = () => {
       <Menu.Root>
         <MenuTrigger endIcon={null} fullWidth justifyContent="center">
           <Tooltip
-            label={
-              formatMessage({
+            label={formatMessage(
+              {
                 id: 'app.components.LeftMenu.trialCountdown',
                 defaultMessage: 'Your trial ends on ',
-              }) + 'April 1, 2025'
-            }
+              },
+              {
+                date: 'April 1, 2025',
+              }
+            )}
             side="right"
           >
             <LightningComponent />

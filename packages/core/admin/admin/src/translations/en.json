@@ -468,7 +468,7 @@
   "app.components.LeftMenu.navbrand.title": "Strapi Dashboard",
   "app.components.LeftMenu.navbrand.workplace": "Workplace",
   "app.components.LeftMenu.plugins": "Plugins",
-  "app.components.LeftMenu.trialCountdown": "Your trial ends on ",
+  "app.components.LeftMenu.trialCountdown": "Your trial ends on {date}.",
   "app.components.LeftMenuFooter.help": "Help",
   "app.components.LeftMenuFooter.poweredBy": "Powered by ",
   "app.components.LeftMenuLinkContainer.collectionTypes": "Collection Types",

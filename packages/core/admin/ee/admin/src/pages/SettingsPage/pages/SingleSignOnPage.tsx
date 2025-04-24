@@ -1,5 +1,4 @@
 import {
-  Badge,
   Button,
   Flex,
   Grid,
@@ -11,7 +10,6 @@ import {
 import { Check } from '@strapi/icons';
 import { useIntl } from 'react-intl';
 import * as yup from 'yup';
-import { GradientBadge } from '../../../../../../admin/src/components/GradientBadge';
 
 import {
   Form,
@@ -20,6 +18,7 @@ import {
   useField,
 } from '../../../../../../admin/src/components/Form';
 import { InputRenderer } from '../../../../../../admin/src/components/FormInputs/Renderer';
+import { GradientBadge } from '../../../../../../admin/src/components/GradientBadge';
 import { Layouts } from '../../../../../../admin/src/components/Layouts/Layout';
 import { Page } from '../../../../../../admin/src/components/PageHelpers';
 import { useTypedSelector } from '../../../../../../admin/src/core/store/hooks';

@@ -45,8 +45,12 @@ import {
 } from '../services/release';
 
 const GradientBadge = styled(Badge)`
-  background: linear-gradient(45deg, #4945ff, #9736e8);
-  color: #ffffff !important;
+  background: linear-gradient(
+    90deg,
+    ${({ theme }) => theme.colors.primary600} 0%,
+    ${({ theme }) => theme.colors.alternative600} 121.48%
+  );
+  fill: #ffffff !important;
   padding: 4px 10px;
 `;
 
@@ -185,8 +189,6 @@ const INITIAL_FORM_VALUES = {
 } satisfies FormValues;
 
 const ReleasesPage = () => {
-  const { license } = useLicenseLimits();
-  console.log('license', license);
   const location = useLocation();
   const [releaseModalShown, setReleaseModalShown] = React.useState(false);
   const { toggleNotification } = useNotification();
@@ -294,7 +296,7 @@ const ReleasesPage = () => {
         secondaryAction={
           <GradientBadge>
             <Flex gap={1} alignItems="center">
-              <Lightning width={16} height={16} fill="neutral1000" />
+              <Lightning width={16} height={16} fill="neutral0" />
               <Typography textColor="#ffffff">
                 {formatMessage({
                   id: 'components.premiumFeature.title',

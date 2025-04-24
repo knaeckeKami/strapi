@@ -1,5 +1,4 @@
 import { Box, Button, Flex, Typography } from '@strapi/design-system';
-import React, { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { styled } from 'styled-components';
 
@@ -16,7 +15,11 @@ declare global {
 }
 
 const BannerBackground = styled(Flex)`
-  background: linear-gradient(90deg, #4945ff 0%, #9736e8 121.48%);
+  background: linear-gradient(
+    90deg,
+    ${({ theme }) => theme.colors.primary600} 0%,
+    ${({ theme }) => theme.colors.alternative600} 121.48%
+  );
 `;
 
 const UpsellBanner = () => {
@@ -50,7 +53,13 @@ const UpsellBanner = () => {
               'As part of your trial, you can explore premium tools such as Content History, Releases, and Single Sign-On (SSO).',
           })}
         </Typography>
-        <Button variant="tertiary" hasRadius>
+        <Button
+          variant="tertiary"
+          hasRadius
+          onClick={() => {
+            window.open('https://strapi.chargebeeportal.com', '_blank');
+          }}
+        >
           {formatMessage({
             id: 'app.components.UpsellBanner.button',
             defaultMessage: 'Upgrade now',
