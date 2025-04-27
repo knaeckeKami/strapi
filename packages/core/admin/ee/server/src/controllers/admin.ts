@@ -8,7 +8,7 @@ export default {
     const flags = strapi.config.get('admin.flags', {});
     try {
       return {
-        data: { isEE: strapi.EE, features: strapi.ee.features.list(), flags, type: strapi.ee.type },
+        data: { isEE: strapi.EE, isTrial: (strapi.ee as any).isTrial, features: strapi.ee.features.list(), flags, type: strapi.ee.type },
       };
     } catch (err) {
       return { data: { isEE: false, features: [], flags } };
@@ -51,6 +51,7 @@ export default {
       licenseLimitStatus,
       isHostedOnStrapiCloud: env('STRAPI_HOSTING', null) === 'strapi.cloud',
       type: strapi.ee.type,
+      isTrial: true,
       features: strapi.ee.features.list() ?? [],
     };
 

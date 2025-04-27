@@ -3,6 +3,7 @@ import { Lightning } from '@strapi/icons';
 import { useIntl } from 'react-intl';
 import { styled } from 'styled-components';
 import React, { ReactNode } from 'react';
+import { useLicenseLimits } from '@strapi/admin/strapi-admin/ee';
 
 const LightningComponent = styled(Lightning)`
   fill: linear-gradient(
@@ -92,28 +93,40 @@ const MenuTrigger = styled(Menu.Trigger)`
 
 const TrialCountdown = ({ daysLeftInTrial }: TrialCountdownProps) => {
   const { formatMessage } = useIntl();
+  const { license, isError, isLoading } = useLicenseLimits();
+
+  if (isError || isLoading || !license) {
+    return null;
+  }
+
+  const { isTrial } = license;
 
   return (
-    <Flex justifyContent="center" padding={3}>
-      <Menu.Root>
-        <Tooltip
-          label={formatMessage(
-            {
-              id: 'app.components.LeftMenu.trialCountdown',
-              defaultMessage: 'Your trial ends on ',
-            },
-            {
-              date: 'April 1, 2025',
-            }
-          )}
-          side="right"
-        >
-          <MenuTrigger endIcon={null} fullWidth justifyContent="center">
-            <CircleProgressBar percentage={((30 - 1) * 100) / 30} circleWidth={32} />
-          </MenuTrigger>
-        </Tooltip>
-      </Menu.Root>
-    </Flex>
+    isTrial === true && (
+      <Flex justifyContent="center" padding={3}>
+        <Menu.Root>
+          <Tooltip
+            label={formatMessage(
+              {
+                id: 'app.components.LeftMenu.trialCountdown',
+                defaultMessage: 'Your trial ends on ',
+              },
+              {
+                date: 'April 1, 2025',
+              }
+            )}
+            side="right"
+          >
+            <MenuTrigger endIcon={null} fullWidth justifyContent="center">
+              <CircleProgressBar
+                percentage={((30 - daysLeftInTrial) * 100) / 30}
+                circleWidth={32}
+              />
+            </MenuTrigger>
+          </Tooltip>
+        </Menu.Root>
+      </Flex>
+    )
   );
 };
 
