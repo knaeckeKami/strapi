@@ -4,14 +4,18 @@ import { Box, Flex, Grid, Main, Typography } from '@strapi/design-system';
 import { CheckCircle, Pencil, PuzzlePiece } from '@strapi/icons';
 import { MessageDescriptor, useIntl } from 'react-intl';
 
+import { useLicenseLimits } from '../../../../ee/admin/src/hooks/useLicenseLimits';
+
 import { Layouts } from '../../components/Layouts/Layout';
 import { Page } from '../../components/PageHelpers';
 import { Widget } from '../../components/WidgetHelpers';
+
 import { useEnterprise } from '../../ee';
 import { useAuth } from '../../features/Auth';
 import { useStrapiApp } from '../../features/StrapiApp';
 
 import { LastEditedWidget, LastPublishedWidget } from './components/ContentManagerWidgets';
+import { FreeTrialModal } from './components/FreeTrialModal';
 import { GuidedTour } from './components/GuidedTour';
 
 /* -------------------------------------------------------------------------------------------------
@@ -87,7 +91,7 @@ const UnstableHomePageCe = () => {
   const user = useAuth('HomePageCE', (state) => state.user);
   const displayName = user?.firstname ?? user?.username ?? user?.email;
   const getAllWidgets = useStrapiApp('UnstableHomepageCe', (state) => state.widgets.getAll);
-
+  const { isTrial } = useLicenseLimits();
   return (
     <Main>
       <Page.Title>
@@ -103,6 +107,7 @@ const UnstableHomePageCe = () => {
           defaultMessage: 'Welcome to your administration panel',
         })}
       />
+      {isTrial && <FreeTrialModal />}
       <Layouts.Content>
         <Flex direction="column" alignItems="stretch" gap={8} paddingBottom={10}>
           <GuidedTour />
@@ -151,6 +156,7 @@ const HomePageCE = () => {
           defaultMessage: 'Welcome to your administration panel',
         })}
       />
+      <FreeTrialModal />
       <Layouts.Content>
         <Flex direction="column" alignItems="stretch" gap={8} paddingBottom={10}>
           <GuidedTour />
