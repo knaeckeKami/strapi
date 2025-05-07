@@ -26,6 +26,16 @@ import type {
 
 const { isUsingTypeScript } = tsUtils;
 
+class LicenseCheckError extends Error {
+  shouldFallback = false;
+
+  constructor(message: string, shouldFallback = false) {
+    super(message);
+
+    this.shouldFallback = shouldFallback;
+  }
+}
+
 /**
  * A set of functions called "actions" for `Admin`
  */
@@ -176,5 +186,29 @@ export default {
       }));
 
     ctx.send({ plugins }) satisfies Plugins.Response;
+  },
+
+  async licenseTrialTimeLeft() {
+    const throwError = () => {
+      throw new LicenseCheckError(
+        'Could not proceed to retrieve the trial time left for your license.',
+        true
+      );
+    };
+
+    // TODO: retrieve the real license key
+    // const license = process.env.STRAPI_LICENSE || readLicense(licenseDir);
+    // const a = verifyLicens e(license);
+    const licenseKey = '00902332-43ef-442b-91ce-a765d150fb89';
+
+    const data = await strapi
+      // TODO: use the license registry endpoint
+      .fetch(`http://localhost:4007/api/licenses/${licenseKey}/trial-countdown`, {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
+      })
+      .catch(throwError);
+
+    return data;
   },
 };

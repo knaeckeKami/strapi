@@ -6,6 +6,7 @@ import {
   type UpdateProjectSettings,
   type Plugins,
   type GetLicenseLimitInformation,
+  type GetLicenseTrialTimeLeft,
 } from '../../../shared/contracts/admin';
 import { prefixFileUrlWithBackendUrl } from '../utils/urls';
 
@@ -21,7 +22,7 @@ interface ConfigurationLogo {
 
 const admin = adminApi
   .enhanceEndpoints({
-    addTagTypes: ['ProjectSettings', 'LicenseLimits'],
+    addTagTypes: ['ProjectSettings', 'LicenseLimits', 'LicenseTrialTimeLeft'],
   })
   .injectEndpoints({
     endpoints: (builder) => ({
@@ -107,6 +108,26 @@ const admin = adminApi
         }),
         providesTags: ['LicenseLimits'],
       }),
+      getLicenseTrialTimeLeft: builder.query<GetLicenseTrialTimeLeft.Response, void>({
+        query: () => ({
+          url: '/admin/license-trial-time-left',
+          method: 'GET',
+        }),
+        providesTags: ['LicenseTrialTimeLeft'],
+        transformResponse(res: GetLicenseTrialTimeLeft.Response) {
+          const targetDate = new Date(res.data.trialEndsAt);
+          const now = new Date();
+
+          const millisecondsPerDay = 1000 * 60 * 60 * 24;
+          const timeDifference = targetDate.getTime() - now.getTime();
+
+          const daysLeft = Math.ceil(timeDifference / millisecondsPerDay);
+
+          return {
+            data: { ...res.data, daysLeft },
+          };
+        },
+      }),
     }),
     overrideExisting: false,
   });
@@ -119,6 +140,7 @@ const {
   useUpdateProjectSettingsMutation,
   useGetPluginsQuery,
   useGetLicenseLimitsQuery,
+  useGetLicenseTrialTimeLeftQuery,
 } = admin;
 
 export {
@@ -129,6 +151,7 @@ export {
   useUpdateProjectSettingsMutation,
   useGetPluginsQuery,
   useGetLicenseLimitsQuery,
+  useGetLicenseTrialTimeLeftQuery,
 };
 
 export type { ConfigurationLogo };

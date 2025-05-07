@@ -7,8 +7,9 @@ import {
   useTracking,
   useRBAC,
   Layouts,
+  GradientBadge,
 } from '@strapi/admin/strapi-admin';
-import { Badge, Button, Typography, Flex, Link, Dialog } from '@strapi/design-system';
+import { Button, Typography, Flex, Link, Dialog } from '@strapi/design-system';
 import { ArrowLeft, WarningCircle } from '@strapi/icons';
 import { stringify } from 'qs';
 import { useIntl } from 'react-intl';
@@ -115,9 +116,12 @@ export const VersionHeader = ({ headerId }: VersionHeaderProps) => {
           minute: 'numeric',
         })}
         secondaryAction={
-          <Badge backgroundColor="primary700" textColor="#ffffff">
-            Premium feature
-          </Badge>
+          <GradientBadge
+            label={formatMessage({
+              id: 'components.premiumFeature.title',
+              defaultMessage: 'Premium feature',
+            })}
+          />
         }
         subtitle={
           <Typography variant="epsilon" textColor="neutral600">

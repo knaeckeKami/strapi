@@ -218,3 +218,20 @@ export declare namespace GetLicenseLimitInformation {
     error?: errors.ApplicationError;
   }
 }
+
+/**
+ * /license-trial-time-left – get license trial time left
+ */
+export declare namespace GetLicenseTrialTimeLeft {
+  export interface Request {
+    body: {};
+    query: {};
+  }
+  export interface Response {
+    data: {
+      trialEndsAt: string;
+      daysLeft: number;
+    };
+    error?: errors.ApplicationError;
+  }
+}
