@@ -112,15 +112,17 @@ async function syncMetadatas(configuration, schema) {
       return acc;
     }
 
-    // if the mainField is id you can keep it
-    if (edit.mainField === 'id') return acc;
+    const mainFields = Array.isArray(edit.mainField) ? edit.mainField : [edit.mainField];
 
-    // check the mainField in the targetModel
+    if (mainFields.length === 1 && mainFields[0] === 'id') return acc;
+
     const targetSchema = getTargetSchema(attr.targetModel);
 
     if (!targetSchema) return acc;
 
-    if (!isSortable(targetSchema, edit.mainField)) {
+    const isValid = mainFields.every(field => isSortable(targetSchema, field));
+
+    if (!isValid) {
       _.set(updatedMeta, ['edit', 'mainField'], getDefaultMainField(targetSchema));
       _.set(acc, [key], updatedMeta);
       return acc;

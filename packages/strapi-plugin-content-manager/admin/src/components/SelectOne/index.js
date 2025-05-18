@@ -7,6 +7,7 @@ import SingleValue from './SingleValue';
 function SelectOne({
   components,
   mainField,
+  displayFields,
   name,
   isDisabled,
   isLoading,
@@ -36,7 +37,18 @@ function SelectOne({
       onMenuScrollToBottom={onMenuScrollToBottom}
       placeholder={placeholder}
       styles={styles}
-      value={isNull(value) ? null : { label: get(value, [mainField.name], ''), value }}
+      value={
+        isNull(value)
+          ? null
+          : {
+              label: `${value.id} - ${(
+                (displayFields && displayFields.length) ? displayFields : [mainField.name]
+              )
+                .map(field => get(value, [field], ''))
+                .join(' ')}`,
+              value,
+            }
+      }
     />
   );
 }
@@ -44,6 +56,7 @@ function SelectOne({
 SelectOne.defaultProps = {
   components: {},
   value: null,
+  displayFields: null,
 };
 
 SelectOne.propTypes = {
@@ -56,6 +69,7 @@ SelectOne.propTypes = {
       type: PropTypes.string.isRequired,
     }).isRequired,
   }).isRequired,
+  displayFields: PropTypes.arrayOf(PropTypes.string),
   name: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
   onInputChange: PropTypes.func.isRequired,

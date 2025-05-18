@@ -9,6 +9,7 @@ const RelationPreviewTooltip = ({
   tooltipId,
   rowId,
   mainField,
+  displayFields,
   name,
   queryInfos: { endPoint },
   size,
@@ -52,9 +53,14 @@ const RelationPreviewTooltip = ({
 
   const getValueToDisplay = useCallback(
     item => {
-      return getDisplayedValue(mainField.schema.type, item[mainField.name], mainField.name);
+      const fields =
+        displayFields && displayFields.length ? displayFields : [mainField.name];
+      const vals = fields
+        .map(field => getDisplayedValue(mainField.schema.type, item[field], field))
+        .join(' ');
+      return `${item.id} - ${vals}`;
     },
-    [mainField]
+    [displayFields, mainField]
   );
 
   // Used to update the position after the loader
@@ -106,6 +112,7 @@ RelationPreviewTooltip.propTypes = {
       type: PropTypes.string.isRequired,
     }).isRequired,
   }).isRequired,
+  displayFields: PropTypes.arrayOf(PropTypes.string),
   name: PropTypes.string.isRequired,
   size: PropTypes.number.isRequired,
   rowId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,

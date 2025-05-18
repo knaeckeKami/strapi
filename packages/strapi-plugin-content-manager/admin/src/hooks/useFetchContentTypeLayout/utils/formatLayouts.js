@@ -71,7 +71,8 @@ const createMetasSchema = (initialData, models) => {
 
       if (schema.type === 'relation') {
         const relationModel = getRelationModel(schema.targetModel, models);
-        const mainFieldName = metadatas.edit.mainField;
+        const mainFieldNames = [].concat(metadatas.edit.mainField || 'id');
+        const mainFieldName = mainFieldNames[0];
         const mainField = {
           name: mainFieldName,
           schema: get(relationModel, ['attributes', mainFieldName]),
@@ -81,10 +82,12 @@ const createMetasSchema = (initialData, models) => {
           list: {
             ...metadatas.list,
             mainField,
+            displayFields: mainFieldNames,
           },
           edit: {
             ...metadatas.edit,
             mainField,
+            displayFields: mainFieldNames,
           },
         };
       }

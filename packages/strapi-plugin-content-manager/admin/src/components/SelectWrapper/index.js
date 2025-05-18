@@ -52,6 +52,7 @@ function SelectWrapper({
   isFieldAllowed,
   isFieldReadable,
   mainField,
+  displayFields,
   name,
   relationType,
   targetModel,
@@ -149,7 +150,12 @@ function SelectWrapper({
         });
 
         const formattedData = data.map(obj => {
-          return { value: obj, label: obj[mainField.name] };
+          const fields = (displayFields && displayFields.length)
+            ? displayFields
+            : [mainField.name];
+          const values = fields.map(f => obj[f]).join(' ');
+          const label = `${obj.id} - ${values}`;
+          return { value: obj, label };
         });
 
         setOptions(prevState =>
@@ -178,6 +184,7 @@ function SelectWrapper({
       endPoint,
       idsToOmit,
       mainField.name,
+      displayFields,
     ]
   );
 
@@ -319,6 +326,7 @@ function SelectWrapper({
           isLoading={isLoading}
           isClearable
           mainField={mainField}
+          displayFields={displayFields}
           move={moveRelation}
           name={name}
           options={filteredOptions}
@@ -353,6 +361,7 @@ SelectWrapper.defaultProps = {
   labelIcon: null,
   isFieldAllowed: true,
   placeholder: '',
+  displayFields: null,
 };
 
 SelectWrapper.propTypes = {
@@ -375,6 +384,7 @@ SelectWrapper.propTypes = {
       type: PropTypes.string.isRequired,
     }).isRequired,
   }).isRequired,
+  displayFields: PropTypes.arrayOf(PropTypes.string),
   name: PropTypes.string.isRequired,
   placeholder: PropTypes.string,
   relationType: PropTypes.string.isRequired,

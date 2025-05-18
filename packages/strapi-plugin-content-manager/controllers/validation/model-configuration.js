@@ -42,8 +42,15 @@ const createSettingsSchema = schema => {
       searchable: yup.boolean().required(),
       // should be reset when the type changes
       mainField: yup
-        .string()
-        .oneOf(validAttributes.concat('id'))
+        .mixed()
+        .test('is-valid', '${path} must be a string or array', value => {
+          if (Array.isArray(value)) {
+            return value.every(v => validAttributes.concat('id').includes(v));
+          }
+          return typeof value === 'string'
+            ? validAttributes.concat('id').includes(value)
+            : false;
+        })
         .default('id'),
       // should be reset when the type changes
       defaultSortBy: yup
@@ -72,7 +79,18 @@ const createMetadasSchema = schema => {
               placeholder: yup.string(),
               editable: yup.boolean(),
               visible: yup.boolean(),
-              mainField: yup.string(),
+              mainField: yup.mixed().test(
+                'is-valid',
+                '${path} must be a string or array',
+                value => {
+                  if (Array.isArray(value)) {
+                    return value.every(v => Object.keys(schema.attributes).includes(v));
+                  }
+                  return typeof value === 'string'
+                    ? Object.keys(schema.attributes).includes(value) || value === 'id'
+                    : false;
+                }
+              ),
             })
             .noUnknown()
             .required(),

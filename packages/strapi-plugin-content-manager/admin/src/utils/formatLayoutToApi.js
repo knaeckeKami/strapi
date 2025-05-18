@@ -14,9 +14,12 @@ const formatLayoutToApi = ({ layouts, metadatas, ...rest }) => {
     const currentMetadatas = get(metadatas, [current], {});
     let editMetadatas = currentMetadatas.edit;
 
-    if (editMetadatas.mainField) {
-      editMetadatas = { ...editMetadatas, mainField: currentMetadatas.edit.mainField.name };
+    if (Array.isArray(editMetadatas.displayFields)) {
+      editMetadatas = { ...editMetadatas, mainField: editMetadatas.displayFields };
+    } else if (editMetadatas.mainField && editMetadatas.mainField.name) {
+      editMetadatas = { ...editMetadatas, mainField: editMetadatas.mainField.name };
     }
+    editMetadatas = omit(editMetadatas, ['displayFields']);
 
     return {
       ...acc,

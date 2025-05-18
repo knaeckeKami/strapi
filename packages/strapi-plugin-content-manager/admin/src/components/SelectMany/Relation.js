@@ -18,6 +18,7 @@ const Relation = ({
   isDisabled,
   isDragging,
   mainField,
+  displayFields,
   onRemove,
   searchToPersist,
   to,
@@ -43,8 +44,12 @@ const Relation = ({
     ? formatMessage({ id: getTrad(titleLabelID) })
     : formatMessage({ id: getTrad('containers.Edit.clickToJump') });
 
-  const value = data[mainField.name];
-  const formattedValue = getDisplayedValue(mainField.schema.type, value, mainField.name);
+  const fields = (displayFields && displayFields.length)
+    ? displayFields
+    : [mainField.name];
+  const formattedValue = `${data.id} - ${fields
+    .map(field => getDisplayedValue(mainField.schema.type, data[field], field))
+    .join(' ')}`;
 
   if (isDragging || !displayNavigationLink) {
     title = '';
@@ -84,6 +89,7 @@ Relation.defaultProps = {
   onRemove: () => {},
   searchToPersist: null,
   to: '',
+  displayFields: null,
 };
 
 Relation.propTypes = {
@@ -98,6 +104,7 @@ Relation.propTypes = {
       type: PropTypes.string.isRequired,
     }).isRequired,
   }).isRequired,
+  displayFields: PropTypes.arrayOf(PropTypes.string),
   onRemove: PropTypes.func,
   searchToPersist: PropTypes.string,
   to: PropTypes.string,

@@ -55,8 +55,12 @@ module.exports = {
       ? await getService('components').findConfiguration(modelDef)
       : await getService('content-types').findConfiguration(modelDef);
 
-    const field = prop(`metadatas.${targetField}.edit.mainField`, modelConfig) || 'id';
-    const pickFields = [field, 'id', target.primaryKey, PUBLISHED_AT_ATTRIBUTE];
+    const field = prop(
+      `metadatas.${targetField}.edit.mainField`,
+      modelConfig
+    ) || 'id';
+    const fields = Array.isArray(field) ? field : [field];
+    const pickFields = fields.concat(['id', target.primaryKey, PUBLISHED_AT_ATTRIBUTE]);
 
     ctx.body = entities.map(pick(pickFields));
   },

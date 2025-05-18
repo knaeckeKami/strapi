@@ -25,7 +25,15 @@ const RelationPreviewList = ({
   const [tooltipIsDisplayed, setDisplayTooltip] = useState(false);
   const isSingle = ['oneWay', 'oneToOne', 'manyToOne'].includes(relationType);
   const tooltipId = useMemo(() => `${rowId}-${cellId}`, [rowId, cellId]);
-  const valueToDisplay = value ? value[mainField.name] : '-';
+  const fields =
+    metadatas.displayFields && metadatas.displayFields.length
+      ? metadatas.displayFields
+      : [mainField.name];
+  const label =
+    value && value.id != null
+      ? `${value.id} - ${fields.map(field => value[field]).join(' ')}`
+      : '-';
+  const valueToDisplay = label;
 
   if (value === undefined) {
     return (
@@ -83,6 +91,7 @@ const RelationPreviewList = ({
           tooltipId={tooltipId}
           value={value}
           mainField={mainField}
+          displayFields={metadatas.displayFields}
           queryInfos={queryInfos}
           size={size}
         />
@@ -96,6 +105,7 @@ RelationPreviewList.propTypes = {
     cellId: PropTypes.string.isRequired,
     metadatas: PropTypes.shape({
       mainField: PropTypes.object.isRequired,
+      displayFields: PropTypes.arrayOf(PropTypes.string),
     }).isRequired,
     name: PropTypes.string.isRequired,
     relationType: PropTypes.string,

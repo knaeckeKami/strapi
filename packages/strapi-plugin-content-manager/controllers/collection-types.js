@@ -273,10 +273,11 @@ module.exports = {
 
     const config = await contentTypeService.findConfiguration({ uid: model });
     const mainField = prop(['metadatas', assoc.alias, 'edit', 'mainField'], config);
+    const fields = Array.isArray(mainField) ? mainField : [mainField];
 
     ctx.body = {
       pagination: relationList.pagination,
-      results: relationList.results.map(pick(['id', modelDef.primaryKey, mainField])),
+      results: relationList.results.map(pick(['id', modelDef.primaryKey, ...fields])),
     };
   },
 };
