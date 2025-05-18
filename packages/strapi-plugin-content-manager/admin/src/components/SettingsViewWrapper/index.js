@@ -4,6 +4,7 @@ import { get, isEqual, upperFirst } from 'lodash';
 import { withRouter } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
 import { Inputs as Input, Header } from '@buffetjs/custom';
+import MultiSelect from '../MultiSelect';
 import {
   BackHeader,
   LoadingIndicatorPage,
@@ -104,7 +105,7 @@ const SettingsViewWrapper = ({
       ];
     }
 
-    if (input.name === 'settings.mainField') {
+    if (input.name === 'settings.displayFields') {
       const options = Object.keys(attributes).filter(attr => {
         const type = get(attributes, [attr, 'type'], '');
 
@@ -162,23 +163,32 @@ const SettingsViewWrapper = ({
               <SectionTitle isSettings />
               <div className="row">
                 {inputs.map(input => {
+                  const isMulti = input.type === 'multi-select';
                   return (
                     <FormattedMessage key={input.name} id={input.label.id}>
                       {label => (
                         <div className={input.customBootstrapClass}>
-                          <FormattedMessage
-                            id={get(input, 'description.id', 'app.utils.defaultMessage')}
-                          >
-                            {description => (
-                              <Input
-                                {...input}
-                                description={description}
-                                label={label === ' ' ? null : label}
-                                onChange={onChange}
-                                options={getSelectOptions(input)}
-                                value={get(modifiedData, input.name, '')}
-                              />
-                            )}
+                          <FormattedMessage id={get(input, 'description.id', 'app.utils.defaultMessage')}>
+                            {description =>
+                              isMulti ? (
+                                <MultiSelect
+                                  name={input.name}
+                                  options={getSelectOptions(input)}
+                                  onChange={onChange}
+                                  value={get(modifiedData, input.name, [])}
+                                  placeholder={description}
+                                />
+                              ) : (
+                                <Input
+                                  {...input}
+                                  description={description}
+                                  label={label === ' ' ? null : label}
+                                  onChange={onChange}
+                                  options={getSelectOptions(input)}
+                                  value={get(modifiedData, input.name, '')}
+                                />
+                              )
+                            }
                           </FormattedMessage>
                         </div>
                       )}

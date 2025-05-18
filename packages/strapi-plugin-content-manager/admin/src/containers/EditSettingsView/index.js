@@ -269,8 +269,8 @@ const EditSettingsView = ({ components, mainLayout, isContentTypeView, slug, upd
             description: {
               id: `${pluginId}.containers.SettingPage.editSettings.entry.title.description`,
             },
-            type: 'select',
-            name: 'settings.mainField',
+            type: 'multi-select',
+            name: 'settings.displayFields',
             customBootstrapClass: 'col-md-4',
             selectOptions: ['id'],
             didCheckErrors: false,

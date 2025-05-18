@@ -6,7 +6,7 @@ import SingleValue from './SingleValue';
 
 function SelectOne({
   components,
-  mainField,
+  displayFields,
   name,
   isDisabled,
   isLoading,
@@ -27,7 +27,7 @@ function SelectOne({
       isClearable
       isDisabled={isDisabled}
       isLoading={isLoading}
-      mainField={mainField}
+      mainField={{ name: displayFields[0] }}
       options={options}
       onChange={onChange}
       onInputChange={onInputChange}
@@ -36,7 +36,11 @@ function SelectOne({
       onMenuScrollToBottom={onMenuScrollToBottom}
       placeholder={placeholder}
       styles={styles}
-      value={isNull(value) ? null : { label: get(value, [mainField.name], ''), value }}
+      value={
+        isNull(value)
+          ? null
+          : { label: `${value.id} - ${displayFields.map(f => get(value, f, '')).join(' ')}`, value }
+      }
     />
   );
 }
@@ -50,12 +54,7 @@ SelectOne.propTypes = {
   components: PropTypes.object,
   isDisabled: PropTypes.bool.isRequired,
   isLoading: PropTypes.bool.isRequired,
-  mainField: PropTypes.shape({
-    name: PropTypes.string.isRequired,
-    schema: PropTypes.shape({
-      type: PropTypes.string.isRequired,
-    }).isRequired,
-  }).isRequired,
+  displayFields: PropTypes.array.isRequired,
   name: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
   onInputChange: PropTypes.func.isRequired,

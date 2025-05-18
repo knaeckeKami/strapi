@@ -12,7 +12,7 @@ import RelationPreviewTooltip from './RelationPreviewTooltip';
 
 const RelationPreviewList = ({
   options: {
-    metadatas: { mainField },
+    metadatas: { displayFields },
     relationType,
     value,
     rowId,
@@ -25,7 +25,9 @@ const RelationPreviewList = ({
   const [tooltipIsDisplayed, setDisplayTooltip] = useState(false);
   const isSingle = ['oneWay', 'oneToOne', 'manyToOne'].includes(relationType);
   const tooltipId = useMemo(() => `${rowId}-${cellId}`, [rowId, cellId]);
-  const valueToDisplay = value ? value[mainField.name] : '-';
+  const valueToDisplay = value
+    ? `${value.id} - ${displayFields.map(field => value[field]).join(' ')}`
+    : '-';
 
   if (value === undefined) {
     return (
@@ -82,7 +84,7 @@ const RelationPreviewList = ({
           rowId={rowId}
           tooltipId={tooltipId}
           value={value}
-          mainField={mainField}
+          displayFields={displayFields}
           queryInfos={queryInfos}
           size={size}
         />
@@ -95,7 +97,7 @@ RelationPreviewList.propTypes = {
   options: PropTypes.shape({
     cellId: PropTypes.string.isRequired,
     metadatas: PropTypes.shape({
-      mainField: PropTypes.object.isRequired,
+      displayFields: PropTypes.array.isRequired,
     }).isRequired,
     name: PropTypes.string.isRequired,
     relationType: PropTypes.string,

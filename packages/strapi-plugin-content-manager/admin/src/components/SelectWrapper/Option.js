@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import { get, has, isEmpty } from 'lodash';
 import { Flex, Text } from '@buffetjs/core';
 import { RelationDPState } from 'strapi-helper-plugin';
-import { getDisplayedValue, getTrad } from '../../utils';
+import { getTrad } from '../../utils';
 
 const TextGrow = styled(Text)`
   flex-grow: 2;
@@ -22,8 +22,8 @@ const Option = props => {
     : 'components.Select.publish-info-title';
   const title = formatMessage({ id: getTrad(titleLabelID) });
   const fontWeight = props.isFocused ? 'bold' : 'regular';
-  const mainField = get(props, ['selectProps', 'mainField'], {});
-  const value = getDisplayedValue(mainField.schema.type, props.label, mainField.name);
+  const displayFields = get(props, ['selectProps', 'displayFields'], []);
+  const value = displayFields.map(f => get(props.data.value, f, '')).join(' ');
 
   if (hasDraftAndPublish) {
     return (
@@ -64,12 +64,7 @@ Option.propTypes = {
   isFocused: PropTypes.bool.isRequired,
   selectProps: PropTypes.shape({
     hasDraftAndPublish: PropTypes.bool,
-    mainField: PropTypes.shape({
-      name: PropTypes.string.isRequired,
-      schema: PropTypes.shape({
-        type: PropTypes.string.isRequired,
-      }).isRequired,
-    }).isRequired,
+    displayFields: PropTypes.array,
   }).isRequired,
 };
 

@@ -4,14 +4,12 @@ import PropTypes from 'prop-types';
 import { get, has, isEmpty } from 'lodash';
 import { Flex, Padded, Text } from '@buffetjs/core';
 import { RelationDPState } from 'strapi-helper-plugin';
-import { getDisplayedValue } from '../../utils';
 
 const SingleValue = props => {
   const Component = components.SingleValue;
   const hasDraftAndPublish = has(get(props, 'data.value'), 'published_at');
   const isDraft = isEmpty(get(props, 'data.value.published_at'));
-  const mainField = get(props, ['selectProps', 'mainField'], {});
-  const value = getDisplayedValue(mainField.schema.type, props.data.label, mainField.name);
+  const value = props.data.label;
 
   if (hasDraftAndPublish) {
     return (
@@ -45,14 +43,7 @@ const SingleValue = props => {
 
 SingleValue.propTypes = {
   data: PropTypes.object.isRequired,
-  selectProps: PropTypes.shape({
-    mainField: PropTypes.shape({
-      name: PropTypes.string.isRequired,
-      schema: PropTypes.shape({
-        type: PropTypes.string.isRequired,
-      }).isRequired,
-    }).isRequired,
-  }).isRequired,
+  selectProps: PropTypes.object.isRequired,
 };
 
 export default SingleValue;

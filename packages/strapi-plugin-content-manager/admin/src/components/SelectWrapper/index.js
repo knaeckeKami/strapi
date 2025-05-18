@@ -21,6 +21,7 @@ import IndicatorSeparator from './IndicatorSeparator';
 import Option from './Option';
 import { A, BaselineAlignment } from './components';
 import { connect, select, styles } from './utils';
+import getRelationLabel from '../../utils/getRelationLabel';
 
 const initialPaginationState = {
   _contains: '',
@@ -51,7 +52,7 @@ function SelectWrapper({
   isCreatingEntry,
   isFieldAllowed,
   isFieldReadable,
-  mainField,
+  displayFields,
   name,
   relationType,
   targetModel,
@@ -149,7 +150,8 @@ function SelectWrapper({
         });
 
         const formattedData = data.map(obj => {
-          return { value: obj, label: obj[mainField.name] };
+          const label = `${obj.id} - ${getRelationLabel(displayFields, obj)}`;
+          return { value: obj, label };
         });
 
         setOptions(prevState =>
@@ -177,7 +179,7 @@ function SelectWrapper({
       containsKey,
       endPoint,
       idsToOmit,
-      mainField.name,
+      displayFields.join(','),
     ]
   );
 
@@ -318,7 +320,7 @@ function SelectWrapper({
           isDisabled={isDisabled}
           isLoading={isLoading}
           isClearable
-          mainField={mainField}
+          mainField={{ name: displayFields[0] }}
           move={moveRelation}
           name={name}
           options={filteredOptions}
@@ -353,6 +355,7 @@ SelectWrapper.defaultProps = {
   labelIcon: null,
   isFieldAllowed: true,
   placeholder: '',
+  displayFields: ['id'],
 };
 
 SelectWrapper.propTypes = {
@@ -369,12 +372,7 @@ SelectWrapper.propTypes = {
   isCreatingEntry: PropTypes.bool.isRequired,
   isFieldAllowed: PropTypes.bool,
   isFieldReadable: PropTypes.bool.isRequired,
-  mainField: PropTypes.shape({
-    name: PropTypes.string.isRequired,
-    schema: PropTypes.shape({
-      type: PropTypes.string.isRequired,
-    }).isRequired,
-  }).isRequired,
+  displayFields: PropTypes.array.isRequired,
   name: PropTypes.string.isRequired,
   placeholder: PropTypes.string,
   relationType: PropTypes.string.isRequired,

@@ -3,12 +3,12 @@ import { Text, Padded } from '@buffetjs/core';
 import { request } from 'strapi-helper-plugin';
 import { LoadingIndicator, Tooltip } from '@buffetjs/styles';
 import PropTypes from 'prop-types';
-import { getDisplayedValue, getRequestUrl } from '../../utils';
+import { getRequestUrl } from '../../utils';
 
 const RelationPreviewTooltip = ({
   tooltipId,
   rowId,
-  mainField,
+  displayFields,
   name,
   queryInfos: { endPoint },
   size,
@@ -51,10 +51,8 @@ const RelationPreviewTooltip = ({
   }, [fetchRelationData]);
 
   const getValueToDisplay = useCallback(
-    item => {
-      return getDisplayedValue(mainField.schema.type, item[mainField.name], mainField.name);
-    },
-    [mainField]
+    item => `${item.id} - ${displayFields.map(field => item[field]).join(' ')}`,
+    [displayFields]
   );
 
   // Used to update the position after the loader
@@ -100,12 +98,7 @@ const RelationPreviewTooltip = ({
 
 RelationPreviewTooltip.propTypes = {
   tooltipId: PropTypes.string.isRequired,
-  mainField: PropTypes.exact({
-    name: PropTypes.string.isRequired,
-    schema: PropTypes.shape({
-      type: PropTypes.string.isRequired,
-    }).isRequired,
-  }).isRequired,
+  displayFields: PropTypes.array.isRequired,
   name: PropTypes.string.isRequired,
   size: PropTypes.number.isRequired,
   rowId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,

@@ -5,7 +5,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { isEmpty } from 'lodash';
 import { useIntl } from 'react-intl';
 import { RelationDPState } from 'strapi-helper-plugin';
-import { getDisplayedValue, getTrad } from '../../utils';
+import { getTrad } from '../../utils';
 import IconRemove from '../../assets/images/icon_remove.svg';
 import { Span } from './components';
 
@@ -17,7 +17,7 @@ const Relation = ({
   hasDraftAndPublish,
   isDisabled,
   isDragging,
-  mainField,
+  displayFields,
   onRemove,
   searchToPersist,
   to,
@@ -43,8 +43,8 @@ const Relation = ({
     ? formatMessage({ id: getTrad(titleLabelID) })
     : formatMessage({ id: getTrad('containers.Edit.clickToJump') });
 
-  const value = data[mainField.name];
-  const formattedValue = getDisplayedValue(mainField.schema.type, value, mainField.name);
+  const mainDisplay = displayFields.map(field => data[field]).join(' ');
+  const formattedValue = `${data.id} - ${mainDisplay}`;
 
   if (isDragging || !displayNavigationLink) {
     title = '';
@@ -92,12 +92,7 @@ Relation.propTypes = {
   hasDraftAndPublish: PropTypes.bool.isRequired,
   isDisabled: PropTypes.bool.isRequired,
   isDragging: PropTypes.bool,
-  mainField: PropTypes.shape({
-    name: PropTypes.string.isRequired,
-    schema: PropTypes.shape({
-      type: PropTypes.string.isRequired,
-    }).isRequired,
-  }).isRequired,
+  displayFields: PropTypes.array.isRequired,
   onRemove: PropTypes.func,
   searchToPersist: PropTypes.string,
   to: PropTypes.string,

@@ -15,7 +15,7 @@ function ListItem({
   displayNavigationLink,
   findRelation,
   isDisabled,
-  mainField,
+  displayFields,
   moveRelation,
   onRemove,
   searchToPersist,
@@ -33,7 +33,7 @@ function ListItem({
       originalIndex,
       data,
       hasDraftAndPublish,
-      mainField,
+      displayFields,
     },
     collect: monitor => ({
       isDragging: monitor.isDragging(),
@@ -68,7 +68,7 @@ function ListItem({
       <Relation
         displayNavigationLink={displayNavigationLink}
         hasDraftAndPublish={hasDraftAndPublish}
-        mainField={mainField}
+        displayFields={displayFields}
         onRemove={onRemove}
         data={data}
         to={to}
@@ -92,12 +92,7 @@ ListItem.propTypes = {
   displayNavigationLink: PropTypes.bool.isRequired,
   findRelation: PropTypes.func,
   isDisabled: PropTypes.bool.isRequired,
-  mainField: PropTypes.shape({
-    name: PropTypes.string.isRequired,
-    schema: PropTypes.shape({
-      type: PropTypes.string.isRequired,
-    }).isRequired,
-  }).isRequired,
+  displayFields: PropTypes.array.isRequired,
   moveRelation: PropTypes.func,
   onRemove: PropTypes.func,
   searchToPersist: PropTypes.string,

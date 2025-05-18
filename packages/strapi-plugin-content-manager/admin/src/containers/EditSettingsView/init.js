@@ -7,6 +7,10 @@ const init = (initialState, mainLayout, components) => {
 
   set(initialData, ['layouts', 'edit'], formatLayout(createLayout(mainLayout.layouts.edit)));
 
+  if (!initialData.settings.displayFields) {
+    initialData.settings.displayFields = [initialData.settings.mainField];
+  }
+
   return fromJS({
     ...initialState.toJS(),
     initialData,

@@ -11,7 +11,7 @@ function SelectMany({
   addRelation,
   components,
   displayNavigationLink,
-  mainField,
+  displayFields,
   name,
   isDisabled,
   isLoading,
@@ -78,7 +78,7 @@ function SelectMany({
 
           return true;
         }}
-        mainField={mainField}
+        displayFields={displayFields}
         isLoading={isLoading}
         isMulti
         isSearchable
@@ -103,7 +103,7 @@ function SelectMany({
                 displayNavigationLink={displayNavigationLink}
                 isDisabled={isDisabled}
                 findRelation={findRelation}
-                mainField={mainField}
+                displayFields={displayFields}
                 moveRelation={moveRelation}
                 onRemove={() => {
                   if (!isDisabled) {
@@ -135,12 +135,7 @@ SelectMany.propTypes = {
   displayNavigationLink: PropTypes.bool.isRequired,
   isDisabled: PropTypes.bool.isRequired,
   isLoading: PropTypes.bool.isRequired,
-  mainField: PropTypes.shape({
-    name: PropTypes.string.isRequired,
-    schema: PropTypes.shape({
-      type: PropTypes.string.isRequired,
-    }).isRequired,
-  }).isRequired,
+  displayFields: PropTypes.array.isRequired,
   move: PropTypes.func,
   name: PropTypes.string.isRequired,
   onInputChange: PropTypes.func.isRequired,
