@@ -20,10 +20,12 @@ const Option = props => {
   const titleLabelID = isDraft
     ? 'components.Select.draft-info-title'
     : 'components.Select.publish-info-title';
-  const title = formatMessage({ id: getTrad(titleLabelID) });
+  const stateTitle = formatMessage({ id: getTrad(titleLabelID) });
   const fontWeight = props.isFocused ? 'bold' : 'regular';
   const mainField = get(props, ['selectProps', 'mainField'], {});
-  const value = getDisplayedValue(mainField.schema.type, props.label, mainField.name);
+  const data = get(props, 'data.value', {});
+  const mainVal = getDisplayedValue(mainField.schema.type, data[mainField.name], mainField.name);
+  const value = mainField.name === 'id' ? `${data.id}` : `${data.id} - ${mainVal}`;
 
   if (hasDraftAndPublish) {
     return (
@@ -35,7 +37,7 @@ const Option = props => {
             marginRight="10px"
             isDraft={isDraft}
             marginBottom="0"
-            title={title}
+            title={stateTitle}
           />
 
           <TextGrow ellipsis as="div" fontWeight={fontWeight} title={value}>

@@ -11,7 +11,9 @@ const SingleValue = props => {
   const hasDraftAndPublish = has(get(props, 'data.value'), 'published_at');
   const isDraft = isEmpty(get(props, 'data.value.published_at'));
   const mainField = get(props, ['selectProps', 'mainField'], {});
-  const value = getDisplayedValue(mainField.schema.type, props.data.label, mainField.name);
+  const data = get(props, 'data.value', {});
+  const mainVal = getDisplayedValue(mainField.schema.type, get(data, [mainField.name]), mainField.name);
+  const value = mainField.name === 'id' ? `${data.id}` : `${data.id} - ${mainVal}`;
 
   if (hasDraftAndPublish) {
     return (

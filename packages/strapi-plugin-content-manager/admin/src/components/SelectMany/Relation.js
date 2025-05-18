@@ -39,37 +39,44 @@ const Relation = ({
   const titleLabelID = isDraft
     ? 'components.Select.draft-info-title'
     : 'components.Select.publish-info-title';
-  let title = hasDraftAndPublish
+  const stateTitle = hasDraftAndPublish
     ? formatMessage({ id: getTrad(titleLabelID) })
-    : formatMessage({ id: getTrad('containers.Edit.clickToJump') });
+    : '';
 
   const value = data[mainField.name];
-  const formattedValue = getDisplayedValue(mainField.schema.type, value, mainField.name);
+  const mainDisplay = getDisplayedValue(
+    mainField.schema.type,
+    value,
+    mainField.name
+  );
+  const formattedValue =
+    mainField.name === 'id' ? `${data.id}` : `${data.id} - ${mainDisplay}`;
+  let displayTitle = displayNavigationLink ? formattedValue : '';
 
   if (isDragging || !displayNavigationLink) {
-    title = '';
+    displayTitle = '';
   }
 
   return (
     <>
-      <div style={{ cursor }} title={title}>
+      <div style={{ cursor }} title={displayTitle}>
         <div className="dragHandle">
           <span />
         </div>
         {hasDraftAndPublish && (
           <div>
-            <RelationDPState isDraft={isDraft} />
+            <RelationDPState isDraft={isDraft} title={stateTitle} />
           </div>
         )}
         {displayNavigationLink ? (
           <Link
             to={{ pathname: to, state: { from: pathname }, search: searchToPersist }}
-            title={title}
+            title={displayTitle}
           >
             <Span>{formattedValue}&nbsp;</Span>
           </Link>
         ) : (
-          <Span>{formattedValue}&nbsp;</Span>
+          <Span title={displayTitle}>{formattedValue}&nbsp;</Span>
         )}
       </div>
       <div style={{ cursor, width: 'auto' }}>

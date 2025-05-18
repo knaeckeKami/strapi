@@ -52,7 +52,12 @@ const RelationPreviewTooltip = ({
 
   const getValueToDisplay = useCallback(
     item => {
-      return getDisplayedValue(mainField.schema.type, item[mainField.name], mainField.name);
+      const mainVal = getDisplayedValue(
+        mainField.schema.type,
+        item[mainField.name],
+        mainField.name
+      );
+      return mainField.name === 'id' ? `${item.id}` : `${item.id} - ${mainVal}`;
     },
     [mainField]
   );
