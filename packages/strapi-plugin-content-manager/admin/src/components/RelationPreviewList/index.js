@@ -25,7 +25,11 @@ const RelationPreviewList = ({
   const [tooltipIsDisplayed, setDisplayTooltip] = useState(false);
   const isSingle = ['oneWay', 'oneToOne', 'manyToOne'].includes(relationType);
   const tooltipId = useMemo(() => `${rowId}-${cellId}`, [rowId, cellId]);
-  const valueToDisplay = value ? value[mainField.name] : '-';
+  const valueToDisplay = value
+    ? mainField.name === 'id'
+      ? `${value.id}`
+      : `${value.id} - ${value[mainField.name]}`
+    : '-';
 
   if (value === undefined) {
     return (

@@ -149,7 +149,12 @@ function SelectWrapper({
         });
 
         const formattedData = data.map(obj => {
-          return { value: obj, label: obj[mainField.name] };
+          const mainValue = obj[mainField.name];
+          const label =
+            mainField.name === 'id'
+              ? `${obj.id}`
+              : `${obj.id} - ${mainValue}`;
+          return { value: obj, label };
         });
 
         setOptions(prevState =>

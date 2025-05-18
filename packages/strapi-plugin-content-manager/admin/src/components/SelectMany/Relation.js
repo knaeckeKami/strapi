@@ -44,7 +44,13 @@ const Relation = ({
     : formatMessage({ id: getTrad('containers.Edit.clickToJump') });
 
   const value = data[mainField.name];
-  const formattedValue = getDisplayedValue(mainField.schema.type, value, mainField.name);
+  const mainDisplay = getDisplayedValue(
+    mainField.schema.type,
+    value,
+    mainField.name
+  );
+  const formattedValue =
+    mainField.name === 'id' ? `${data.id}` : `${data.id} - ${mainDisplay}`;
 
   if (isDragging || !displayNavigationLink) {
     title = '';
