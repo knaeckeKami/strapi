@@ -36,7 +36,17 @@ function SelectOne({
       onMenuScrollToBottom={onMenuScrollToBottom}
       placeholder={placeholder}
       styles={styles}
-      value={isNull(value) ? null : { label: get(value, [mainField.name], ''), value }}
+      value={
+        isNull(value)
+          ? null
+          : {
+              label:
+                mainField.name === 'id'
+                  ? `${value.id}`
+                  : `${value.id} - ${get(value, [mainField.name], '')}`,
+              value,
+            }
+      }
     />
   );
 }

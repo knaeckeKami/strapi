@@ -39,12 +39,19 @@ const Relation = ({
   const titleLabelID = isDraft
     ? 'components.Select.draft-info-title'
     : 'components.Select.publish-info-title';
-  let title = hasDraftAndPublish
-    ? formatMessage({ id: getTrad(titleLabelID) })
-    : formatMessage({ id: getTrad('containers.Edit.clickToJump') });
-
   const value = data[mainField.name];
-  const formattedValue = getDisplayedValue(mainField.schema.type, value, mainField.name);
+  const mainDisplay = getDisplayedValue(
+    mainField.schema.type,
+    value,
+    mainField.name
+  );
+  const formattedValue =
+    mainField.name === 'id' ? `${data.id}` : `${data.id} - ${mainDisplay}`;
+  let title = formattedValue;
+  if (hasDraftAndPublish) {
+    const stateLabel = formatMessage({ id: getTrad(titleLabelID) });
+    title = `${formattedValue} (${stateLabel})`;
+  }
 
   if (isDragging || !displayNavigationLink) {
     title = '';
