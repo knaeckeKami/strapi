@@ -4,14 +4,14 @@ const path = require('path');
 const webpack = require('webpack');
 
 // Webpack plugins
-const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const DuplicatePckgChecker = require('duplicate-package-checker-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const WebpackBar = require('webpackbar');
 const isWsl = require('is-wsl');
 const alias = require('./webpack.alias.js');
+
+const processPolyfill = require.resolve('process/browser');
 
 // TODO: parametrize
 const URLs = {
@@ -44,14 +44,7 @@ module.exports = ({
         }),
         new WebpackBar(),
       ]
-    : [
-        new DuplicatePckgChecker({
-          verbose: true,
-        }),
-        new FriendlyErrorsWebpackPlugin({
-          clearConsole: false,
-        }),
-      ];
+    : [];
 
   return {
     mode: isProduction ? 'production' : 'development',
@@ -91,9 +84,6 @@ module.exports = ({
             },
           },
           parallel: !isWsl,
-          // Enable file caching
-          cache: true,
-          sourceMap: false,
         }),
       ],
       runtimeChunk: true,
@@ -174,6 +164,9 @@ module.exports = ({
       symlinks: false,
       extensions: ['.js', '.jsx', '.react.js'],
       mainFields: ['browser', 'jsnext:main', 'main'],
+      fallback: {
+        process: processPolyfill,
+      },
     },
     plugins: [
       new HtmlWebpackPlugin({
@@ -206,6 +199,7 @@ module.exports = ({
           resource.request = resource.request.replace(/ee_else_ce/, path.join(wantedPath));
         }
       }),
+      new webpack.ProvidePlugin({ process: 'process/browser' }),
       ...webpackPlugins,
     ],
   };

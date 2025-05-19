@@ -36,14 +36,14 @@ module.exports = () => {
     ...config,
     devServer: {
       port: 4000,
-      clientLogLevel: 'none',
-      quiet: true,
+      client: {
+        logging: 'none',
+      },
       historyApiFallback: {
         index: '/admin/',
         disableDotRule: true,
       },
       open: false,
-      openPage: '/admin',
     },
   };
 };
